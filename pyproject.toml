@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "airflow_aws_shared_secrets"
+version = "0.0.1"
+description = "Airflow AWS Shared Secrets Manager"
+authors = ["Albert Franzi"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+apache-airflow-providers-amazon = "^8.1.0"
+
+[tool.poetry.group.dev.dependencies]
+tox = "^4.4.6"
+pre-commit = "^3.1.1"
+mypy = "^1.1.1"
+black = "^23.1.0"
+pytest = "^7.2.2"
+pytest-cov = "^4.0.0"
+flake8 = "^6.0.0"
+moto = {extras = ["server"], version = "^4.1.10"}
+flask-cors = "^3.0.10"
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+profile = "black"
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-p no:warnings"
+testpaths = [
+    "tests",
+]
+env = [
+    "AWS_REGION = us-east-1",
+]
+
+[build-system]
+requires = ["poetry-core>=1.4.0"]
+build-backend = "poetry.core.masonry.api"
