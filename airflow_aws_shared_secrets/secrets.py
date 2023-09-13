@@ -3,14 +3,13 @@ import re
 import boto3
 from boto3 import Session
 from botocore.exceptions import ClientError
-from mypy_boto3_secretsmanager import SecretsManagerClient
 
 
 def aws_session(region_name: str | None = None) -> Session:
     return boto3.session.Session(region_name=region_name)
 
 
-def secrets_client(region_name: str | None = None) -> SecretsManagerClient:
+def secrets_client(region_name: str | None = None):  # type: ignore
     return aws_session(region_name).client(service_name="secretsmanager")
 
 
