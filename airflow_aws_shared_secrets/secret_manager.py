@@ -2,7 +2,7 @@ from typing import Any
 
 from airflow.providers.amazon.aws.secrets.secrets_manager import SecretsManagerBackend
 
-from airflow_aws_shared_secrets import get_aws_region
+from airflow_aws_shared_secrets import get_aws_region, secrets
 
 
 class SharedSecretsManagerBackend(SecretsManagerBackend):
@@ -36,10 +36,6 @@ class SharedSecretsManagerBackend(SecretsManagerBackend):
                 account_id=self.shared_account,
                 prefix=self.connections_prefix_shared,
             )
-            secret = SecretsManagerBackend._get_secret(
-                self,
-                path_prefix=path_prefix,
-                secret_id=secret_id,
-                lookup_pattern=self.connections_lookup_pattern,
-            )
+            secret_name = self.build_path(path_prefix, secret_id, self.sep)
+            secret = secrets.get_secret(region_name=self.aws_region, secret_name=secret_name)
         return secret
