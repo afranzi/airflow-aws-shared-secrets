@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "airflow_aws_shared_secrets"
-version = "0.0.3"
+version = "0.0.4"
 description = "Airflow AWS Shared Secrets Manager"
 authors = ["Albert Franzi"]
 readme = "README.md"
