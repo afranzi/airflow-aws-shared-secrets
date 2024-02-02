@@ -1,25 +1,28 @@
 ## Prerequisites
 
-- Apache Airflow 2.x
-- Access to the AWS accounts from which you want to fetch secrets
+- **Apache Airflow 2.x:** Ensure Airflow is updated to at least version 2.0.
+- **AWS Account Access:** You need access to the AWS accounts from which secrets will be fetched
   _(
   See: [Permissions to AWS Secrets Manager secrets for users in a different account](https://docs.aws.amazon.com/secretsmanager/latest/userguide/auth-and-access_examples_cross.html))_
-- Permissions to create and manage secrets in AWS Secrets Manager
-- Access to edit your Airflow Helm properties.
+- **Permissions**: Adequate permissions to manage secrets within AWS Secrets Manager and configure IAM policies.
+- **Helm:** Familiarity with Helm for deploying and managing Kubernetes applications, as this guide uses the Airflow
+  Helm Chart.
 
 ## Helm configuration
 
-The documentation is based on [Airflow Helm Chart (Users Community)](https://airflow-helm.github.io/charts/), but it
-should apply to other existing Airflow Helms, since the configuration would be handled via ENV vars or the config file.
+This documentation leverages the [Airflow Helm Chart (Users Community)](https://airflow-helm.github.io/charts/). The
+instructions should be universally applicable across different Helm deployments, thanks to the flexibility of
+environment variables and configuration files.
 
-!!! note extraPipPackages
-    Add the **airflow-aws-shared-secrets** package in the `extraPipPackages` section, so the library is deployed into
-    the airflow workers pods.
+!!! note "extraPipPackages"
+    Ensure the **airflow-aws-shared-secrets** package is included in the `extraPipPackages` section of your Helm values.
+    This ensures the custom library is deployed into the Airflow worker pods, enabling them to interact with the custom
+    backend.
 
 ## Configure Airflow to use our Custom Backend
 
-To use the AWs Shared Secrets Backed in Airflow, we must update the airflow.cfg file or set the corresponding
-environment variable:
+To activate the AWS Shared Secrets Backend in Airflow, adjust either the `airflow.cfg` file directly or set the 
+appropriate environment variables:
 
 Edit airflow.cfg:
 
@@ -38,18 +41,26 @@ AIRFLOW__SECRETS__BACKEND_KWARGS: '{"connections_prefix": "airflow/connections/"
 
 ## Backend properties
 
-We expect the following extra properties to be defined within the `backend_kwargs` in addition to
+The custom backend expects additional properties within `backend_kwargs` enhancing functionality beyond the native capabilities in addition to
 the [native ones](https://airflow.apache.org/docs/apache-airflow-providers-amazon/stable/secrets-backends/aws-secrets-manager.html#aws-secrets-manager-backend).
 
-- shared_account: Account ID from the aws-account you are sharing the main secrets.
-- aws_region: The AWs Region from where the secrets are being stored in.
+- shared_account: Specifies the AWS account ID where the primary secrets are stored. This facilitates cross-account secret access.
+- aws_region: Defines the AWS region of the secrets manager, ensuring the backend can retrieve secrets from the specified geographical location.
 
-!!! note Conclusion
-    By following these steps, you've successfully overridden the default AWS connections backend in Airflow with a custom one that allows accessing secrets from other AWS accounts.
+!!! info "Conclusion"
+    By following these steps, you've successfully overridden the default AWS connections backend in Airflow with a custom
+    one that allows accessing secrets from other AWS accounts.
     This setup enhances your Airflow project's flexibility and security when managing cross-account AWS resources.
 
+## Implementing Best Practices
+When configuring and using the custom backend, adhere to the following best practices for security and efficiency:
+
+- **Minimal IAM Permissions:** Assign only the necessary permissions to the IAM roles used by Airflow, following the principle of least privilege.
+- **Secure Secret Storage:** Ensure that all secrets stored in AWS Secrets Manager are encrypted at rest using keys managed by AWS KMS.
+- **Regular Audits:** Periodically review AWS access logs and Airflow access patterns to ensure compliance with security policies.
 
 ## Specs Example
+
 ```yaml
 apiVersion: v2
 kind: HelmRelease
