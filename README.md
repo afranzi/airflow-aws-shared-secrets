@@ -1,31 +1,21 @@
 # airflow-aws-shared-secrets
 
-SecretsManagerBackend with cross-account access.
+# Introduction
 
-Expected properties where:
-- shared_account: account_id from your core aws-account
-- aws_region: aws_region where the core secrets are stored in
+This guide outlines how to override the default AWS connections backend in Apache Airflow with a custom backend.
+This enables Airflow to access secrets stored in other AWS accounts, in addition to the current one,
+leveraging [AWS Secrets Manager](https://aws.amazon.com/es/secrets-manager/).
 
-```json
-{
-    "connections_prefix": "airflow/connections/${environment}",
-    "connections_prefix_shared" : "airflow/core/connections/${environment}",
-    "shared_account": "123456789012",
-    "aws_region": "eu-central-1"
-}
-```
+## Overview
 
-## Usage
+By default, Airflow uses the `airflow.secrets` base class
+for [secrets backends](https://airflow.apache.org/docs/apache-airflow/stable/security/secrets/secrets-backend/index.html).
+To access secrets across different AWS accounts, we implemented a custom backend that extends this functionality.
 
-We recommend setting up the SharedSecretsManager in
-the [Airflow Helm](https://github.com/airflow-helm/charts/blob/main/charts/airflow/values.yaml) by configuring
-the following config values.
+![Image title](./docs/images/aws-secrets-flow.jpg)
 
-```toml
-### [secrets]
-AIRFLOW__SECRETS__BACKEND: 'airflow_aws_shared_secrets.secret_manager.SharedSecretsManagerBackend'
-AIRFLOW__SECRETS__BACKEND_KWARGS: '{"connections_prefix": "airflow/connections/${environment}", "connections_prefix_shared" : "airflow/core/connections/${environment}", "shared_account": "<my_core_aws_account_id>", "aws_region": "eu-central-1"}'
-```
+> In short, we extended
+> the [SecretsManagerBackend](https://airflow.apache.org/docs/apache-airflow-providers-amazon/stable/secrets-backends/aws-secrets-manager.html)
+> class with cross-account and cross-region secrets access.
 
-Check [configurations-ref](https://airflow.apache.org/docs/apache-airflow/stable/configurations-ref.html) for more
-Airflow configuration possibilities.
+![Image title](./docs/images/aws-shared-secrets-flow.jpg)
