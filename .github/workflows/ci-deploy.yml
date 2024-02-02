@@ -1,4 +1,4 @@
-name: CD - Deploy to Pypi
+name: CI - Deploy to Pypi
 
 on:
   push:

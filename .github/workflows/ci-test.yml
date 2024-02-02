@@ -1,4 +1,4 @@
-name: CI PyTests
+name: CI - PyTests
 
 on:
   push:
