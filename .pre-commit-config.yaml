@@ -31,7 +31,7 @@ repos:
       - id: end-of-file-fixer
       - id: check-docstring-first
       - id: check-yaml
-        exclude: (mkdocs.yml)
+        exclude: (ci-mkdocs.yml)
       - id: debug-statements
       - id: detect-aws-credentials
         args: [ --allow-missing-credentials ]
