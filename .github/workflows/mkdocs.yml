@@ -1,4 +1,4 @@
-name: ci
+name: CI - Docs
 on:
   push:
     branches:
@@ -24,6 +24,8 @@ jobs:
           path: .cache
           restore-keys: |
             mkdocs-material-
+      - name: Install Poetry
+        run: pip install poetry
       - name: Install Dependencies
         run: poetry install --only=docs
       - run: mkdocs gh-deploy --force
