@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "airflow_aws_shared_secrets"
-version = "0.0.4"
+version = "0.0.5"
 description = "Airflow AWS Shared Secrets Manager"
 authors = ["Albert Franzi"]
 readme = "README.md"
@@ -19,6 +19,11 @@ pytest-cov = "^4.0.0"
 flake8 = "^6.0.0"
 moto = {extras = ["server"], version = "^4.1.10"}
 flask-cors = "^3.0.10"
+
+[tool.poetry.group.docs.dependencies]
+mkdocs-material = "^9.5.6"
+mkdocs-git-revision-date-localized-plugin = "^1.2.2"
+mkdocs-git-committers-plugin-2 = "^2.2.3"
 
 [tool.black]
 line-length = 120
