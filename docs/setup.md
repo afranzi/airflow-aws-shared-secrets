@@ -21,7 +21,7 @@ environment variables and configuration files.
 
 ## Configure Airflow to use our Custom Backend
 
-To activate the AWS Shared Secrets Backend in Airflow, adjust either the `airflow.cfg` file directly or set the 
+To activate the AWS Shared Secrets Backend in Airflow, adjust either the `airflow.cfg` file directly or set the
 appropriate environment variables:
 
 Edit airflow.cfg:
